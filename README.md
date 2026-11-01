@@ -3,6 +3,8 @@
 여의도역과 여의나루역 승하차, 날씨로 더현대 서울 주변에 사람이 언제 모이고 언제 빠지는지 읽은 분석입니다.
 공개 데이터만 쓰고, 원자료를 내려받으면 같은 숫자가 다시 나옵니다.
 
+대시보드: https://jhheo51-arch.github.io/yeouido-footfall/
+
 ![요약 그림](assets/summary.png)
 
 ## 30초 안내
@@ -29,7 +31,7 @@
 
 ## 대시보드
 
-[docs/index.html](docs/index.html)은 같은 숫자를 연도별로 걸러 보는 대시보드입니다. 날마다의 하차, 요일별, 월별, 시간대별 승하차, 비 온 휴일 산점도를 담았습니다.
+[docs/index.html](docs/index.html)([공개 주소](https://jhheo51-arch.github.io/yeouido-footfall/))은 같은 숫자를 연도별로 걸러 보는 대시보드입니다. 날마다의 하차, 요일별, 월별, 시간대별 승하차, 비 온 휴일 산점도를 담았습니다.
 `docs/data.js`에는 OA-12914(공공누리 1유형)의 두 역 일별 하차와 날씨, OA-12921은 시간대별 평균 집계 숫자만 들어 있습니다.
 
 ```bash
