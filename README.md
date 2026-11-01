@@ -27,6 +27,16 @@
 
 전체 집계는 [results/summary.txt](results/summary.txt)에 있습니다.
 
+## 대시보드
+
+[docs/index.html](docs/index.html)은 같은 숫자를 연도별로 걸러 보는 대시보드입니다. 날마다의 하차, 요일별, 월별, 시간대별 승하차, 비 온 휴일 산점도를 담았습니다.
+`docs/data.js`에는 OA-12914(공공누리 1유형)의 두 역 일별 하차와 날씨, OA-12921은 시간대별 평균 집계 숫자만 들어 있습니다.
+
+```bash
+python -X utf8 src/dashboard_data.py     # data/out, data/clean 에서 docs/data.js 생성
+python -m http.server 8000 --directory docs   # http://localhost:8000 에서 열기
+```
+
 ### 일요일 행사의 효과를 재려면 몇 번이 필요한가
 
 일요일 하차는 같은 달 일요일끼리 비교해도 흔들림(로그 표준편차)이 0.105입니다.

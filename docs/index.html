@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>여의도 방문 시점</title>
+<meta name="description" content="여의도역과 여의나루역 하차, 날씨로 더현대 서울 주변에 사람이 언제 모이는지 보는 대시보드">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f6f5f1; --card: #ffffff; --ink: #1e1e1e; --muted: #5e6062; --faint: #8a8c8f;
+  --line: #e4e3df; --grid: #eeede9;
+  --s1: #1e9d8b; --s2: #ca7700; --s3: #9a9c9f;
+  --accent-ink: #13806f; --warm-ink: #a86200;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #141413; --card: #1d1d1c; --ink: #ecebe7; --muted: #b0b1ad; --faint: #8e8f8b;
+    --line: #33332f; --grid: #2a2a27;
+    --s1: #22a893; --s2: #d07d0a; --s3: #7b7c79;
+    --accent-ink: #4fcab4; --warm-ink: #efab48;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #141413; --card: #1d1d1c; --ink: #ecebe7; --muted: #b0b1ad; --faint: #8e8f8b;
+  --line: #33332f; --grid: #2a2a27;
+  --s1: #22a893; --s2: #d07d0a; --s3: #7b7c79;
+  --accent-ink: #4fcab4; --warm-ink: #efab48;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink);
+  font-family: "Noto Sans KR", "Malgun Gothic", system-ui, sans-serif; line-height: 1.55; }
+.wrap { max-width: 1180px; margin: 0 auto; padding: 32px 16px 48px; }
+header h1 { font-size: 28px; margin: 0 0 6px; letter-spacing: -0.02em; }
+header p { margin: 0; color: var(--muted); font-size: 15px; }
+.kicker { color: var(--accent-ink); font-weight: 700; font-size: 13px; margin-bottom: 8px; }
+.filters { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; margin: 22px 0 18px;
+  padding: 12px 14px; background: var(--card); border: 1px solid var(--line); border-radius: 10px; }
+.filters label { font-size: 14px; color: var(--muted); display: flex; align-items: center; gap: 8px; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.seg button { border: 0; background: transparent; color: var(--ink); font: inherit; font-size: 14px;
+  padding: 6px 12px; cursor: pointer; }
+.seg button + button { border-left: 1px solid var(--line); }
+.seg button[aria-pressed="true"] { background: var(--s1); color: #fff; }
+.note { font-size: 13px; color: var(--faint); margin-left: auto; }
+.kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.kpi { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; }
+.kpi .v { font-size: 34px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.15; font-variant-numeric: tabular-nums; }
+.kpi .l { font-size: 14px; font-weight: 500; margin-top: 4px; }
+.kpi .s { font-size: 12.5px; color: var(--muted); margin-top: 6px; }
+.kpi .mark { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: 1px; }
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 14px; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px 12px; min-width: 0; }
+.card.wide { grid-column: 1 / -1; }
+.card h2 { font-size: 16px; margin: 0; }
+.card .sub { font-size: 13px; color: var(--muted); margin: 2px 0 10px; }
+.card .head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap; }
+.legend { display: flex; gap: 14px; font-size: 13px; color: var(--muted); margin-bottom: 6px; flex-wrap: wrap; }
+.legend span::before { content: ""; display: inline-block; width: 14px; height: 3px; border-radius: 2px;
+  background: var(--c); margin-right: 6px; vertical-align: 3px; }
+.legend span.box::before { height: 10px; width: 10px; vertical-align: 0; }
+.chart { position: relative; height: 280px; }
+.card.wide .chart { height: 300px; }
+.read { font-size: 13.5px; margin: 10px 0 2px; padding-top: 10px; border-top: 1px solid var(--line); }
+details { margin-top: 14px; background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 12px 18px; }
+summary { cursor: pointer; font-weight: 500; font-size: 15px; }
+table { border-collapse: collapse; width: 100%; font-size: 13.5px; margin-top: 10px; font-variant-numeric: tabular-nums; }
+th, td { text-align: right; padding: 6px 8px; border-bottom: 1px solid var(--line); }
+th:first-child, td:first-child { text-align: left; }
+th { color: var(--muted); font-weight: 500; }
+footer { margin-top: 26px; font-size: 13px; color: var(--muted); }
+footer ul { padding-left: 18px; margin: 6px 0 12px; }
+a { color: var(--accent-ink); }
+@media (max-width: 860px) {
+  .kpis { grid-template-columns: 1fr 1fr; }
+  .grid { grid-template-columns: 1fr; }
+  .note { margin-left: 0; }
+}
+@media (max-width: 420px) { .kpi .v { font-size: 28px; } header h1 { font-size: 23px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="kicker">공개 데이터 분석 | 2024-01 ~ 2026-09</div>
+    <h1>여의도에 사람이 언제 모이고 언제 빠지나</h1>
+    <p>여의도역(5, 9호선)과 여의나루역(5호선) 하차, 날씨로 더현대 서울 주변의 방문 시점을 읽습니다.</p>
+  </header>
+
+  <div class="filters" role="group" aria-label="필터">
+    <label>연도
+      <span class="seg" id="f-year">
+        <button data-v="all" aria-pressed="true">전체</button><button data-v="2024" aria-pressed="false">2024</button><button data-v="2025" aria-pressed="false">2025</button><button data-v="2026" aria-pressed="false">2026(1~9월)</button>
+      </span>
+    </label>
+    <label><input type="checkbox" id="f-out"> 집회, 불꽃축제 날 빼기</label>
+    <span class="note">시간대별 차트는 서울교통공사 자료라 2024~2025년, 5호선만 있습니다</span>
+  </div>
+
+  <section class="kpis" aria-label="핵심 숫자">
+    <div class="kpi"><div class="v" id="k1">-</div><div class="l">휴일 하루 하차 중앙값, 여의도</div><div class="s" id="k1s"></div></div>
+    <div class="kpi"><div class="v" id="k2">-</div><div class="l">일요일 하차, 토요일보다</div><div class="s" id="k2s"></div></div>
+    <div class="kpi"><div class="v" id="k3">-</div><div class="l">비 온 휴일 하차, 같은 달 휴일 대비</div><div class="s" id="k3s"></div></div>
+    <div class="kpi"><div class="v" id="k4">-</div><div class="l">평일 17~19시 승차, 5호선 여의도</div><div class="s">2024~2025 하루 평균. 퇴근길에 여의도를 떠나는 사람</div></div>
+  </section>
+
+  <div class="grid">
+    <section class="card wide">
+      <div class="head">
+        <div><h2>날마다의 하차</h2><div class="sub">점 하나가 하루. 마우스를 올리면 날씨와 함께 보입니다</div></div>
+        <span class="seg" id="f-days"><button data-v="hol" aria-pressed="true">휴일만</button><button data-v="all" aria-pressed="false">모든 날</button></span>
+      </div>
+      <div class="legend"><span style="--c:var(--s1)">여의도</span><span style="--c:var(--s2)">여의나루</span></div>
+      <div class="chart"><canvas id="c-daily" aria-label="날짜별 하차 선 그래프" role="img"></canvas></div>
+    </section>
+
+    <section class="card">
+      <h2>요일별 하차 중앙값</h2><div class="sub">평일에 걸린 공휴일은 따로 묶었습니다</div>
+      <div class="legend"><span class="box" style="--c:var(--s1)">여의도</span><span class="box" style="--c:var(--s2)">여의나루</span></div>
+      <div class="chart"><canvas id="c-week" aria-label="요일별 하차 막대 그래프" role="img"></canvas></div>
+      <p class="read" id="r-week"></p>
+    </section>
+
+    <section class="card">
+      <h2>월별 휴일 하차 중앙값</h2><div class="sub">휴일 = 토요일, 일요일, 공휴일</div>
+      <div class="legend"><span style="--c:var(--s1)">여의도</span><span style="--c:var(--s2)">여의나루</span></div>
+      <div class="chart"><canvas id="c-month" aria-label="월별 휴일 하차 선 그래프" role="img"></canvas></div>
+      <p class="read" id="r-month"></p>
+    </section>
+
+    <section class="card">
+      <div class="head">
+        <div><h2>시간대별 5호선 여의도</h2><div class="sub">하루 평균 인원, 2024~2025</div></div>
+        <span class="seg" id="f-dir"><button data-v="승차" aria-pressed="true">승차</button><button data-v="하차" aria-pressed="false">하차</button></span>
+      </div>
+      <div class="legend"><span class="box" style="--c:var(--s1)">평일</span><span class="box" style="--c:var(--s3)">주말</span></div>
+      <div class="chart"><canvas id="c-hour" aria-label="시간대별 승하차 막대 그래프" role="img"></canvas></div>
+      <p class="read" id="r-hour"></p>
+    </section>
+
+    <section class="card">
+      <h2>휴일 낮 강수량과 하차</h2><div class="sub">세로축 1 = 그 달 휴일 하차 중앙값. 강수량은 10~20시 합계. 집회, 불꽃축제 날은 점에서 뺐습니다</div>
+      <div class="legend"><span class="box" style="--c:var(--s1)">여의도</span><span class="box" style="--c:var(--s2)">여의나루</span></div>
+      <div class="chart"><canvas id="c-rain" aria-label="강수량과 하차 지수 산점도" role="img"></canvas></div>
+      <p class="read" id="r-rain"></p>
+    </section>
+  </div>
+
+  <details>
+    <summary>표로 보기: 월별 휴일 하차 중앙값</summary>
+    <table id="t-month"><thead><tr><th>월</th><th>여의도</th><th>여의나루</th><th>휴일 수</th></tr></thead><tbody></tbody></table>
+  </details>
+
+  <footer>
+    <b>자료와 정의</b>
+    <ul>
+      <li>서울 열린데이터광장 OA-12914 지하철 호선별 역별 승하차(공공누리 1유형), OA-12921 서울교통공사 역별 시간대별 승하차(공공누리 3유형, 집계 숫자만 인용), Open-Meteo 서울 종로 격자 날씨(CC BY 4.0)</li>
+      <li>여의도역 하차는 5호선과 9호선의 합. 비 온 날은 낮 10~20시 강수 3mm 이상</li>
+      <li>하차 인원은 방문객 수가 아닙니다. 여의도역 휴일 하차에는 IFC몰, 여의도공원, 한강 방문객도 섞여 있습니다</li>
+    </ul>
+    코드와 재현 방법: <a href="https://github.com/jhheo51-arch/yeouido-footfall">github.com/jhheo51-arch/yeouido-footfall</a>
+  </footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="data.js"></script>
+<script>
+const D = window.FOOTFALL;
+const rows = D.daily.map(r => ({ date: r[0], d: new Date(r[0] + "T00:00:00"), y: r[1], n: r[2], hol: !!r[3], rain: r[4], feels: r[5] }));
+rows.forEach(r => { r.ym = r.date.slice(0, 7); r.wd = r.d.getDay(); r.out = D.outliers[r.date] || null; });
+
+// 같은 달 휴일 중앙값 대비 지수(이상치 포함 전체 휴일 기준, analyze.py와 같음)
+const median = a => { if (!a.length) return NaN; const s = [...a].sort((x, y) => x - y), m = s.length >> 1; return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2; };
+const byMonth = {};
+rows.filter(r => r.hol).forEach(r => (byMonth[r.ym] ||= []).push(r));
+Object.values(byMonth).forEach(g => { const my = median(g.map(r => r.y)), mn = median(g.map(r => r.n)); g.forEach(r => { r.yi = r.y / my; r.ni = r.n / mn; }); });
+
+const state = { year: "all", noOut: false, days: "hol", dir: "승차" };
+const fmt = v => Math.round(v).toLocaleString("ko-KR");
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const charts = {};
+
+function seg(id, key) {
+  document.querySelectorAll(`#${id} button`).forEach(b => b.addEventListener("click", () => {
+    document.querySelectorAll(`#${id} button`).forEach(x => x.setAttribute("aria-pressed", x === b));
+    state[key] = b.dataset.v; render();
+  }));
+}
+seg("f-year", "year"); seg("f-days", "days"); seg("f-dir", "dir");
+document.getElementById("f-out").addEventListener("change", e => { state.noOut = e.target.checked; render(); });
+
+function filtered() {
+  return rows.filter(r => (state.year === "all" || r.date.startsWith(state.year)) && !(state.noOut && r.out));
+}
+
+function base(extra = {}) {
+  const ink = css("--muted"), grid = css("--grid");
+  return Object.assign({
+    responsive: true, maintainAspectRatio: false, animation: false,
+    plugins: { legend: { display: false },
+      tooltip: { backgroundColor: css("--card"), titleColor: css("--ink"), bodyColor: css("--ink"), borderColor: css("--line"), borderWidth: 1, padding: 10,
+        titleFont: { family: "Noto Sans KR", weight: "700" }, bodyFont: { family: "Noto Sans KR" }, usePointStyle: true, boxPadding: 4 } },
+    scales: {
+      x: { grid: { display: false }, ticks: { color: ink, maxRotation: 0, autoSkipPadding: 6, font: { family: "Noto Sans KR", size: 12 } }, border: { color: css("--line") } },
+      y: { grid: { color: grid }, ticks: { color: ink, font: { family: "Noto Sans KR", size: 12 }, callback: v => fmt(v) }, border: { display: false }, beginAtZero: true }
+    }
+  }, extra);
+}
+
+function draw(id, cfg) {
+  if (charts[id]) charts[id].destroy();
+  charts[id] = new Chart(document.getElementById(id), cfg);
+}
+
+function render() {
+  const f = filtered(), hol = f.filter(r => r.hol);
+  const s1 = css("--s1"), s2 = css("--s2"), s3 = css("--s3"), card = css("--card");
+
+  // 핵심 숫자
+  const hy = median(hol.map(r => r.y)), wdy = median(f.filter(r => !r.hol).map(r => r.y));
+  k1.textContent = fmt(hy) + "명";
+  k1s.textContent = `평일 중앙값 ${fmt(wdy)}명. 휴일 ${hol.length}일 기준`;
+  const sat = median(hol.filter(r => r.wd === 6).map(r => r.y)), sun = median(hol.filter(r => r.wd === 0).map(r => r.y));
+  k2.textContent = Math.round((sun / sat - 1) * 100) + "%";
+  k2s.textContent = `토요일 ${fmt(sat)}명, 일요일 ${fmt(sun)}명(여의도 중앙값)`;
+  const wet = hol.filter(r => r.rain >= 3);
+  const wy = median(wet.map(r => r.yi)), wn = median(wet.map(r => r.ni));
+  k3.innerHTML = `<span style="color:var(--warm-ink)">${wn.toFixed(2)}배</span>`;
+  k3s.innerHTML = `<span class="mark" style="background:var(--s2)"></span>여의나루 ${wn.toFixed(2)}배, <span class="mark" style="background:var(--s1)"></span>여의도 ${wy.toFixed(2)}배. 비 온 휴일 ${wet.length}일`;
+  const up = D.hourly["승차_평일"], hi = D.hours.indexOf(17);
+  k4.textContent = fmt(up[hi] + up[hi + 1] + up[hi + 2]) + "명";
+
+  // 날마다의 하차
+  const dd = state.days === "hol" ? hol : f;
+  const small = innerWidth < 600, pt = r => r.out ? 5 : (state.days === "hol" && !small ? 2.5 : 1.2);
+  draw("c-daily", { type: "line",
+    data: { labels: dd.map(r => r.date), datasets: [
+      { label: "여의도", data: dd.map(r => r.y), borderColor: s1, backgroundColor: s1, borderWidth: 1.5, pointRadius: dd.map(pt), pointHoverRadius: 6, tension: 0 },
+      { label: "여의나루", data: dd.map(r => r.n), borderColor: s2, backgroundColor: s2, borderWidth: 1.5, pointRadius: dd.map(pt), pointHoverRadius: 6, tension: 0 }] },
+    options: base({ interaction: { mode: "index", intersect: false },
+      plugins: Object.assign(base().plugins, { tooltip: Object.assign(base().plugins.tooltip, { callbacks: {
+        title: it => { const r = dd[it[0].dataIndex]; return `${r.date} (${"일월화수목금토"[r.wd]})${r.out ? "  " + r.out : ""}`; },
+        label: it => ` ${it.dataset.label} ${fmt(it.raw)}명`,
+        afterBody: it => { const r = dd[it[0].dataIndex]; return [`낮 강수 ${r.rain}mm, 체감 ${r.feels}도`]; } } }) }),
+      scales: Object.assign(base().scales, { x: Object.assign(base().scales.x, { ticks: Object.assign(base().scales.x.ticks, { maxTicksLimit: innerWidth < 600 ? 4 : 10, callback: function (v) { return this.getLabelForValue(v).slice(0, 7); } }) }) }) }) });
+
+  // 요일별
+  const groups = [["월", r => !r.hol && r.wd === 1], ["화", r => !r.hol && r.wd === 2], ["수", r => !r.hol && r.wd === 3], ["목", r => !r.hol && r.wd === 4],
+    ["금", r => !r.hol && r.wd === 5], ["토", r => r.wd === 6], ["일", r => r.wd === 0], ["공휴일", r => r.hol && r.wd >= 1 && r.wd <= 5]];
+  const wkY = groups.map(([, t]) => median(f.filter(t).map(r => r.y))), wkN = groups.map(([, t]) => median(f.filter(t).map(r => r.n)));
+  const bar = (label, data, c) => ({ label, data, backgroundColor: c, borderRadius: { topLeft: 4, topRight: 4 }, borderSkipped: "bottom", borderColor: card, borderWidth: { left: 1, right: 1 }, categoryPercentage: 0.78, barPercentage: 0.9 });
+  draw("c-week", { type: "bar", data: { labels: groups.map(g => g[0]), datasets: [bar("여의도", wkY, s1), bar("여의나루", wkN, s2)] },
+    options: base({ scales: Object.assign(base().scales, { x: Object.assign(base().scales.x, { ticks: Object.assign(base().scales.x.ticks, { autoSkip: false }) }) }), plugins: Object.assign(base().plugins, { tooltip: Object.assign(base().plugins.tooltip, { callbacks: { label: it => ` ${it.dataset.label} ${fmt(it.raw)}명` } }) }) }) });
+  r_week.textContent = `여의도는 평일 하루가 토요일의 약 ${(wkY[2] / wkY[5]).toFixed(1)}배로 직장인 비중이 큽니다. 여의나루는 평일과 토요일 차이가 작습니다(수요일 ${fmt(wkN[2])}명, 토요일 ${fmt(wkN[5])}명).`;
+
+  // 월별 휴일
+  const months = [...Array(12)].map((_, i) => i + 1);
+  const mh = months.map(m => hol.filter(r => r.d.getMonth() + 1 === m));
+  const mY = mh.map(g => median(g.map(r => r.y))), mN = mh.map(g => median(g.map(r => r.n)));
+  draw("c-month", { type: "line", data: { labels: months.map(m => m + "월"), datasets: [
+      { label: "여의도", data: mY, borderColor: s1, backgroundColor: s1, borderWidth: 2, pointRadius: 4, pointHoverRadius: 6, pointBorderColor: card, pointBorderWidth: 2, spanGaps: true },
+      { label: "여의나루", data: mN, borderColor: s2, backgroundColor: s2, borderWidth: 2, pointRadius: 4, pointHoverRadius: 6, pointBorderColor: card, pointBorderWidth: 2, spanGaps: true }] },
+    options: base({ interaction: { mode: "index", intersect: false },
+      plugins: Object.assign(base().plugins, { tooltip: Object.assign(base().plugins.tooltip, { callbacks: { label: it => ` ${it.dataset.label} ${isNaN(it.raw) ? "자료 없음" : fmt(it.raw) + "명"}` } }) }) }) });
+  const minI = mY.reduce((b, v, i) => (v < mY[b] ? i : b), 0);
+  r_month.textContent = isNaN(mN[3]) ? "선택한 기간에 일부 달의 자료가 없습니다." :
+    `여의도 휴일은 ${minI + 1}월이 가장 적습니다(${fmt(mY[minI])}명). 여의나루 4월은 1월의 ${(mN[3] / mN[0]).toFixed(1)}배로 한강 나들이 철에 크게 늘어납니다.`;
+  const tb = document.querySelector("#t-month tbody");
+  tb.innerHTML = months.map((m, i) => `<tr><td>${m}월</td><td>${isNaN(mY[i]) ? "-" : fmt(mY[i])}</td><td>${isNaN(mN[i]) ? "-" : fmt(mN[i])}</td><td>${mh[i].length}</td></tr>`).join("");
+
+  // 시간대별
+  const hp = D.hourly[state.dir + "_평일"], hw = D.hourly[state.dir + "_주말"];
+  const hl = D.hours.map(h => h === 5 ? "~6" : h === 24 ? "24~" : String(h));
+  draw("c-hour", { type: "bar", data: { labels: hl, datasets: [bar("평일", hp, s1), bar("주말", hw, s3)] },
+    options: base({ plugins: Object.assign(base().plugins, { tooltip: Object.assign(base().plugins.tooltip, { callbacks: {
+      title: it => { const h = D.hours[it[0].dataIndex]; return h === 5 ? "06시 이전" : h === 24 ? "24시 이후" : `${h}~${h + 1}시`; },
+      label: it => ` ${it.dataset.label} ${fmt(it.raw)}명` } }) }) }) });
+  r_hour.textContent = state.dir === "승차"
+    ? `평일 17~19시에 ${fmt(hp[hi] + hp[hi + 1] + hp[hi + 2])}명이 여의도역에서 탑니다. 퇴근 직전에 들를 이유를 만들 수 있는 시간입니다.`
+    : `주말 하차는 11~15시에 고르게 몰리고, 평일 하차는 출근 시간(8시 ${fmt(hp[D.hours.indexOf(8)])}명)에 집중됩니다.`;
+
+  // 강수량과 하차
+  const pts = (k) => hol.filter(r => !r.out).map(r => ({ x: r.rain, y: r[k], r }));
+  draw("c-rain", { type: "scatter", data: { datasets: [
+      { label: "여의도", data: pts("yi"), backgroundColor: s1 + "b3", borderColor: card, borderWidth: 1, pointRadius: 4, pointHoverRadius: 7 },
+      { label: "여의나루", data: pts("ni"), backgroundColor: s2 + "b3", borderColor: card, borderWidth: 1, pointRadius: 4, pointHoverRadius: 7 }] },
+    options: base({ plugins: Object.assign(base().plugins, { tooltip: Object.assign(base().plugins.tooltip, { callbacks: {
+        title: it => it[0].raw.r.date + (it[0].raw.r.out ? "  " + it[0].raw.r.out : ""),
+        label: it => ` ${it.dataset.label} ${it.raw.y.toFixed(2)}배, 낮 강수 ${it.raw.x}mm` } }) }),
+      scales: { x: Object.assign(base().scales.x, { type: "linear", title: { display: true, text: "낮 10~20시 강수(mm)", color: css("--muted") }, grid: { color: css("--grid") } }),
+        y: Object.assign(base().scales.y, { beginAtZero: false, suggestedMin: 0.4, suggestedMax: 1.6, ticks: Object.assign(base().scales.y.ticks, { callback: v => v.toFixed(1) }) }) } }) });
+  r_rain.textContent = wet.length
+    ? `3mm 이상 비 온 휴일 ${wet.length}일: 여의나루는 ${wn.toFixed(2)}배로 줄고, 실내로 이어진 여의도는 ${wy.toFixed(2)}배로 거의 그대로입니다.`
+    : "선택한 기간에 비 온 휴일이 없습니다.";
+}
+
+const r_week = document.getElementById("r-week"), r_month = document.getElementById("r-month"),
+  r_hour = document.getElementById("r-hour"), r_rain = document.getElementById("r-rain");
+const k1 = document.getElementById("k1"), k1s = document.getElementById("k1s"), k2 = document.getElementById("k2"), k2s = document.getElementById("k2s"),
+  k3 = document.getElementById("k3"), k3s = document.getElementById("k3s"), k4 = document.getElementById("k4");
+render();
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", render);
+let rt; addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(render, 200); });
+</script>
+</body>
+</html>
