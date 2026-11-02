@@ -646,7 +646,7 @@ function render(){
   table("#t2d", ["월", "휴일 하차 중앙값"], mo.map((m, i) => [m, fmt(S.holiday_month[i])]));
   $("#so2").innerHTML = [
     `평일 저녁 7시에도 여의동에 ${fmt(L.local_weekday[19])}명이 남고, 5호선 여의도역에서만 17~20시에 ${fmt(eve)}명이 탑니다. 퇴근길 회원에게 닿을 시간은 평일 저녁입니다.`,
-    `휴일 하차는 일요일(${fmt(S.sun)}명)이 토요일(${fmt(S.sat)}명)보다 적고, 1월(${fmt(S.holiday_month[0])}명)이 11월(${fmt(S.holiday_month[10])}명)의 ${Math.round(S.holiday_month[0] / S.holiday_month[10] * 100)}% 수준입니다. 행사를 붙인다면 일요일과 1월이 비교하기 좋은 빈자리입니다.`,
+    `휴일 하차는 일요일(${fmt(S.sun)}명)이 토요일(${fmt(S.sat)}명)보다 적고, 1월(${fmt(S.holiday_month[0])}명)이 11월(${fmt(S.holiday_month[10])}명)의 ${Math.round(S.holiday_month[0] / S.holiday_month[10] * 100)}% 수준입니다. 행사를 붙인다면 일요일이 비교하기 좋은 빈자리입니다. 한강 쪽 여의나루역은 4월 휴일 하차가 1월의 2.9배라, 봄 한강 행사와 묶기 좋습니다.`,
     `단기체류 외국인은 휴일 저녁 6시에 가장 많지만 ${fmt(L.foreign_holiday[18])}명으로, 같은 시각 내국인의 ${(L.foreign_holiday[18] / L.local_holiday[18] * 100).toFixed(1)}%입니다. 회원 방문을 늘리는 일은 내국인 회원이 중심입니다.`,
   ].map(t => `<li>${t}</li>`).join("");
 
