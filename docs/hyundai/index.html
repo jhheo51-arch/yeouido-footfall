@@ -170,9 +170,9 @@ footer{font-size:12px; color:var(--muted); margin-top:28px; line-height:1.7}
     </div>
     <div class="prop">
       <div class="card">
-        <h3><span class="no">1</span>평일 17~19시 퇴근길</h3>
+        <h3><span class="no">1</span>평일 17~20시 퇴근길</h3>
         <p>퇴근길 회원에게 17시 앱 푸시. 식품관 저녁 혜택, 문화센터 원데이 클래스를 묶습니다.</p>
-        <div class="fig">16,483명<small>평일 17~19시 여의도역 승차</small></div>
+        <div class="fig">16,483명<small>평일 17~20시 여의도역 승차</small></div>
         <dl><dt>재는 법</dt> <dd>대상 회원 10%는 보내지 않고 1인당 평일 저녁 방문 차이를 봅니다.</dd><br><dt>맡을 곳</dt> <dd>회원서비스, 판매기획</dd></dl>
       </div>
       <div class="card">
@@ -259,7 +259,7 @@ footer{font-size:12px; color:var(--muted); margin-top:28px; line-height:1.7}
         <li>25년 추석은 10월, 26년 추석은 9월이었습니다. 10월 실적은 추석이 있던 달과 비교되므로 증가율이 더 낮게 나올 수 있습니다(짐작).</li>
       </ul>
     </div>
-    <div class="src"><b>출처</b> 산업통상부, 「'26년 9월 주요 유통업체 매출 동향」(2026.10.28), 4쪽 백화점 표. 9월 점포 수 56개. 3사 합산이라 현대백화점 단독 수치가 아닙니다.</div>
+    <div class="src"><b>출처</b> 산업통상부, 「'26년 9월 주요 유통업체 매출 동향」(2026.10.28), 4쪽 백화점 표. 롯데, 현대, 신세계 3사의 56개 점포(9월 기준) 합산이라 현대백화점 단독 수치가 아닙니다. 포트폴리오 1쪽은 설 연휴가 낀 2월(25.6%)을 빼고 가장 높았던 5월(24.5%)과 비교했고, 추석 시기 차이는 보정하지 않았습니다.</div>
   </section>
 
   <!-- 화면 2 -->
@@ -289,7 +289,7 @@ footer{font-size:12px; color:var(--muted); margin-top:28px; line-height:1.7}
     <div class="grid2">
       <div class="card">
         <h3>5호선 여의도역 평일 승차, 시간대별</h3>
-        <div class="sub">하루 평균 승차 인원. 17~19시 퇴근길을 강조했습니다</div>
+        <div class="sub">하루 평균 승차 인원. 17~20시(17, 18, 19시대) 퇴근길을 강조했습니다</div>
         <div class="chart" id="c2c"></div>
         <div id="t2c"></div>
       </div>
@@ -341,7 +341,7 @@ footer{font-size:12px; color:var(--muted); margin-top:28px; line-height:1.7}
         <li>현대는 리뷰 741건 중 735건에 답변해 3사 중 응대가 가장 꾸준합니다. 답변 문구에 매장 현장용 대체 방법(예: 바코드 미리 띄우기)을 넣는 것부터 해 볼 수 있습니다.</li>
       </ul>
     </div>
-    <div class="src"><b>출처</b> Google Play 공개 리뷰를 직접 모아 집계(2024.11~2026.10). 주제는 단어 규칙으로 나눴고 리뷰 원문은 싣지 않습니다. 앱스토어(iOS) 리뷰는 포함하지 않았습니다.</div>
+    <div class="src"><b>출처</b> Google Play 공개 리뷰를 직접 모아 집계(2024.11~2026.10). 주제는 단어 규칙으로 나눴고(한 리뷰가 여러 주제에 들 수 있음), 막힘 23건은 혜택 단어와 로그인 또는 실행 오류 단어가 함께 나온 리뷰를 고른 뒤 모두 직접 읽어 확인했습니다. 리뷰 원문은 싣지 않습니다. 앱스토어(iOS) 리뷰는 포함하지 않았습니다.</div>
   </section>
 
   <!-- 화면 4 -->
@@ -361,7 +361,7 @@ footer{font-size:12px; color:var(--muted); margin-top:28px; line-height:1.7}
       <div class="card">
         <h3>2주 안 방문률: 받은 회원과 남겨 둔 회원 <span class="vbadge">가상</span></h3>
         <div class="sub">두 막대의 차이가 행사로 늘어난 방문입니다</div>
-        <div class="legend"><span><i class="box" style="background:var(--green)"></i>안내 받은 회원</span><span><i class="box" style="background:var(--gray)"></i>남겨 둔 회원(10%)</span></div>
+        <div class="legend"><span><i class="box" style="background:var(--green)"></i>안내 받은 회원</span><span><i class="box" style="background:var(--gray)"></i>남겨 둔 회원(10%, 홀드아웃)</span></div>
         <div class="chart" id="c4b"></div>
         <div id="t4b"></div>
       </div>
@@ -607,7 +607,7 @@ function render(){
   const eve = S.board_weekday[12] + S.board_weekday[13] + S.board_weekday[14];
   kpis("#k2", [
     {l:"평일 저녁 7시 여의동 내국인", n:fmt(L.local_weekday[19]), u:"명", s:`이 중 20~39세 ${fmt(L.young_weekday[19])}명(${Math.round(L.young_weekday[19] / L.local_weekday[19] * 100)}%)`, c:"g"},
-    {l:"5호선 여의도 평일 17~19시 승차", n:fmt(eve), u:"명", s:"하루 평균, 퇴근길 3시간 합계", c:"g"},
+    {l:"5호선 여의도 평일 17~20시 승차", n:fmt(eve), u:"명", s:"하루 평균, 퇴근길 3시간 합계", c:"g"},
     {l:"휴일 여의도역 하차 중앙값", n:fmt(S.sun), u:"명", s:`일요일. 토요일은 ${fmt(S.sat)}명`, c:"o"},
     {l:"휴일 저녁 6시 단기체류 외국인", n:fmt(L.foreign_holiday[18]), u:"명", s:`같은 시각 내국인의 ${(L.foreign_holiday[18] / L.local_holiday[18] * 100).toFixed(1)}%`},
   ]);
@@ -645,7 +645,7 @@ function render(){
     color:i => i === jan ? O : i === peak ? G : GR, label:i => (i === jan || i === peak) ? fmt(S.holiday_month[i]) : ""});
   table("#t2d", ["월", "휴일 하차 중앙값"], mo.map((m, i) => [m, fmt(S.holiday_month[i])]));
   $("#so2").innerHTML = [
-    `평일 저녁 7시에도 여의동에 ${fmt(L.local_weekday[19])}명이 남고, 5호선 여의도역에서만 17~19시에 ${fmt(eve)}명이 탑니다. 퇴근길 회원에게 닿을 시간은 평일 저녁입니다.`,
+    `평일 저녁 7시에도 여의동에 ${fmt(L.local_weekday[19])}명이 남고, 5호선 여의도역에서만 17~20시에 ${fmt(eve)}명이 탑니다. 퇴근길 회원에게 닿을 시간은 평일 저녁입니다.`,
     `휴일 하차는 일요일(${fmt(S.sun)}명)이 토요일(${fmt(S.sat)}명)보다 적고, 1월(${fmt(S.holiday_month[0])}명)이 11월(${fmt(S.holiday_month[10])}명)의 ${Math.round(S.holiday_month[0] / S.holiday_month[10] * 100)}% 수준입니다. 행사를 붙인다면 일요일과 1월이 비교하기 좋은 빈자리입니다.`,
     `단기체류 외국인은 휴일 저녁 6시에 가장 많지만 ${fmt(L.foreign_holiday[18])}명으로, 같은 시각 내국인의 ${(L.foreign_holiday[18] / L.local_holiday[18] * 100).toFixed(1)}%입니다. 회원 방문을 늘리는 일은 내국인 회원이 중심입니다.`,
   ].map(t => `<li>${t}</li>`).join("");
