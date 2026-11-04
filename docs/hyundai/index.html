@@ -89,7 +89,7 @@ section.screen.on{display:block}
 .nb .t i{position:absolute; left:0; top:0; height:22px; border-radius:0 4px 4px 0; background:var(--gray)}
 .nb .t i.g{background:var(--green)}
 .nb .t b{position:absolute; top:2px; font-size:13px; font-variant-numeric:tabular-nums}
-.nb .line{left:calc(160px + (100% - 160px) * .25); position:absolute; top:-6px; bottom:-6px; border-left:2px dashed var(--orange-d)}
+.nb .line{left:calc(160px + (100% - 160px) * .33); position:absolute; top:-6px; bottom:-6px; border-left:2px dashed var(--orange-d)}
 .nb .line span{position:absolute; bottom:-18px; left:4px; font-size:12px; font-weight:700; color:var(--orange-d); white-space:nowrap}
 .rule{display:flex; flex-direction:column; gap:10px; font-size:14px; line-height:1.55}
 .rule div{border-left:5px solid var(--gray); padding-left:12px}
@@ -130,7 +130,7 @@ footer{font-size:12px; color:var(--muted); margin-top:28px; line-height:1.7}
 @media (max-width:860px){
   .kpis{grid-template-columns:repeat(2,1fr)}
   .grid2,.grid3,.prop{grid-template-columns:1fr}
-  .nb .r{grid-template-columns:110px 1fr} .nb .line{left:calc(120px + (100% - 120px) * .25)}
+  .nb .r{grid-template-columns:110px 1fr} .nb .line{left:calc(120px + (100% - 120px) * .33)}
   .wrap{padding:20px 16px 48px}
   h1{font-size:21px} .headline .a{font-size:18px}
   .meta{text-align:left}
@@ -166,14 +166,14 @@ footer{font-size:12px; color:var(--muted); margin-top:28px; line-height:1.7}
   <section class="screen on" id="s0">
     <div class="headline">
       <div class="q">결론</div>
-      <div class="a">성장이 느려질 때 버팀목은 방문 횟수입니다. 더현대 서울 주변이 비는 <em>평일 저녁</em>과 <em>일요일</em>에 가까운 회원을 부르고, 회원 10%를 남겨 <em class="o">늘어난 몫만</em> 10주 동안 셉니다.</div>
+      <div class="a">성장이 느려질 때 버팀목은 방문 횟수입니다. 더현대 서울 주변이 비는 <em>평일 저녁</em>과 <em>일요일</em>에 가까운 회원을 부르고, 회원 일부를 남겨 <em class="o">늘어난 몫만</em> 셉니다. 1번은 8주, 2번은 행사 일요일 10번입니다.</div>
     </div>
     <div class="prop">
       <div class="card">
         <h3><span class="no">1</span>평일 17~20시 퇴근길</h3>
-        <p>퇴근길 회원에게 17시 앱 푸시. 식품관 저녁 혜택, 문화센터 원데이 클래스를 묶습니다.</p>
+        <p>퇴근길 회원에게 격주 화요일 16시 앱 푸시. 식품관 저녁 혜택, 문화센터 원데이 클래스를 묶습니다.</p>
         <div class="fig">16,483명<small>평일 17~20시 여의도역 승차</small></div>
-        <dl><dt>재는 법</dt> <dd>대상 회원 10%는 보내지 않고 1인당 평일 저녁 방문 차이를 봅니다.</dd><br><dt>맡을 곳</dt> <dd>회원서비스, 판매기획</dd></dl>
+        <dl><dt>재는 법</dt> <dd>대상 1만 명 중 2천 명(가정값)은 보내지 않고 8주 동안 1인당 평일 저녁 결제일 차이를 봅니다.</dd><br><dt>맡을 곳</dt> <dd>회원서비스, 판매기획</dd></dl>
       </div>
       <div class="card">
         <h3><span class="no">2</span>일요일, 비 예보엔 먼저</h3>
@@ -192,36 +192,36 @@ footer{font-size:12px; color:var(--muted); margin-top:28px; line-height:1.7}
       <div class="card">
         <h3>본전 기준 <span class="vbadge">가정값</span></h3>
         <div class="be" style="margin-top:12px">
-          <div class="big">25%</div>
-          <p>혜택을 받은 방문 중 행사가 없었으면 오지 않았을 새 방문이 이만큼은 돼야 본전입니다. 혜택 1건 비용 5,000원 ÷ 새 방문 1회가 남기는 돈 2만 원(객단가 10만 원 × 수익률 20%). 세 숫자 모두 가정값이며 실제 값을 넣으면 기준선만 바뀝니다.</p>
+          <div class="big">33%</div>
+          <p>혜택을 받은 방문 중 행사가 없었으면 오지 않았을 새 방문이 이만큼은 돼야 본전입니다. 혜택 1건 상한 5,000원 ÷ 새 방문 1회가 남기는 돈 1.5만 원(객단가 10만 원 × 식품 마진 15%). 세 숫자 모두 가정값이며 실제 값을 넣으면 기준선만 바뀝니다.</p>
         </div>
         <div class="sub" style="margin-top:14px">가상 사은행사에서 혜택을 받은 방문 중 새 방문 비율 <span class="vbadge">가상</span></div>
-        <div class="nb" role="img" aria-label="새 방문 비율: 꾸준히 오는 우수고객 4%, 일반 회원 16%, 사다가 멈춘 우수고객 53%, 본전 25%">
+        <div class="nb" role="img" aria-label="새 방문 비율: 꾸준히 오는 우수고객 4%, 일반 회원 16%, 사다가 멈춘 우수고객 53%, 본전 33%">
           <div class="r"><span>꾸준히 오는 우수고객</span><div class="t"><i style="width:4%"></i><b style="left:calc(4% + 6px)">4%</b></div></div>
-          <div class="r"><span>일반 회원</span><div class="t"><i style="width:16%"></i><b style="left:calc(25% + 8px)">16%</b></div></div>
+          <div class="r"><span>일반 회원</span><div class="t"><i style="width:16%"></i><b style="left:calc(16% + 6px)">16%</b></div></div>
           <div class="r"><span style="font-weight:700; color:var(--green-d)">사다가 멈춘 우수고객</span><div class="t"><i class="g" style="width:53%"></i><b style="left:calc(53% + 6px); color:var(--green-d)">53%</b></div></div>
-          <div class="line"><span>본전 25%</span></div>
+          <div class="line"><span>본전 33%</span></div>
         </div>
         <div class="sub" style="margin-top:22px; font-weight:700; color:var(--green-d)">1번 제안 대상을 최근 평일 저녁 방문이 줄어든 회원으로 좁힌 것도 이 차이 때문입니다.</div>
         <div class="note" style="margin-top:6px">5번 화면의 "원래 왔을 방문"(96%, 84%, 47%)을 뒤집은 값입니다.</div>
       </div>
       <div class="card">
-        <h3>결정해 주실 것: 10주 뒤 판단</h3>
+        <h3>결정해 주실 것: 1번 8주 뒤 판단</h3>
         <div class="rule" style="margin-top:12px">
-          <div class="g"><b>넓힌다</b>1인당 평일 저녁 방문이 남겨 둔 회원보다 유의하게 많고, 새 방문 비율이 본전을 넘으면 다른 점포의 직장인 상권으로 넓힙니다.</div>
-          <div class="o"><b>고쳐서 다시</b>방문은 늘었지만 본전 아래면 혜택을 줄이고 푸시만으로 4주 더 봅니다.</div>
-          <div class="k"><b>멈춘다</b>차이가 없거나, 푸시 수신 거부가 남겨 둔 회원보다 늘면 멈춥니다.</div>
+          <div class="g"><b>넓힌다</b>1인당 평일 저녁 결제일이 남겨 둔 회원보다 0.127회 이상 많고(95% 하한도 0 위), 새 방문 비율이 본전을 넘으면 다른 점포의 직장인 상권으로 넓힙니다.</div>
+          <div class="o"><b>고쳐서 다시</b>차이는 0 위지만 넓힐 조건에 못 미치면 혜택을 줄여 봄에 4주 더 봅니다.</div>
+          <div class="k"><b>멈춘다</b>차이가 0 이하이거나, 주간 수신 거부가 0.5%를 넘거나, 적립 누계가 3천만 원에 닿으면 멈춥니다.</div>
         </div>
         <div class="so" style="margin:16px 0 0">
           <b class="t">지켜볼 숫자와 필요한 것</b>
           <ul>
             <li>성과는 회원 1인당 평일 저녁 방문 차이, 보조는 1인당 구매액 차이, 멈춤 신호는 푸시 수신 거부율입니다.</li>
-            <li>앱 푸시 주 1회, 회원 방문 집계 조회, 식품관과 문화센터 협조, 디지털 담당 부서의 앱 점검이 필요합니다.</li>
+            <li>앱 푸시 8주 4회(격주), 회원 방문 집계 조회, 식품관과 문화센터 협조, 디지털 담당 부서의 앱 점검이 필요합니다.</li>
           </ul>
         </div>
       </div>
     </div>
-    <div class="src"><b>근거</b> 16,483명은 서울 열린데이터광장 5호선 여의도역 시간대별 승차(3번 화면), -29%와 1.02배는 같은 곳 역별 승하차로 만든 <a href="https://jhheo51-arch.github.io/yeouido-footfall/" style="color:inherit">역 분석 대시보드</a>, 23건은 Google Play 공개 리뷰 집계(4번 화면)입니다. 10주는 2024-01-07부터 2026-09-27까지 일요일 143개로 잰 흔들림(같은 달 일요일 중앙값 대비 로그 표준편차 0.105)에서 나왔습니다. 하차 10% 증가를 유의수준 5%, 검정력 80%로 가리려면 시범 일요일 10번이 필요합니다(5%면 37번). 객단가, 수익률, 혜택 비용은 가정값이고 새 방문 비율은 가상 데이터입니다.</div>
+    <div class="src"><b>근거</b> 16,483명은 서울 열린데이터광장 5호선 여의도역 시간대별 승차(3번 화면), -29%와 1.02배는 같은 곳 역별 승하차로 만든 <a href="https://jhheo51-arch.github.io/yeouido-footfall/" style="color:inherit">역 분석 대시보드</a>, 23건은 Google Play 공개 리뷰 집계(4번 화면)입니다. 일요일 10번은 2024-01-07부터 2026-09-27까지 일요일 143개로 잰 흔들림(같은 달 일요일 중앙값 대비 로그 표준편차 0.105)에서 나왔습니다. 하차 10% 증가를 유의수준 5%, 검정력 80%로 가리려면 시범 일요일 10번이 필요합니다(5%면 37번). 객단가, 식품 마진, 혜택 비용, 대상 규모는 가정값이고 새 방문 비율은 가상 데이터입니다.</div>
   </section>
 
   <!-- 화면 1 -->
